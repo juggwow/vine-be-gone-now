@@ -12,19 +12,20 @@ declare module "next-auth" {
   declare module "next-auth" {
   interface Session {
     user?: {
-      name?: string | null
-      email?: string | null
-      image?: string | null
-      role?: string
+      name: string | null
+      email: string | null
+      image: string | null
       id?: string | number
     }
+    // sub?: string
+    // provider: string
 }
   }
 
 declare module "next-auth/jwt" {
     interface JWT {
-      id? : number|string
-      role?: string
+      // id? : number|string
+      // provider: string
     }
   }
 

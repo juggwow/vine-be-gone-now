@@ -25,7 +25,6 @@ export default function Profile() {
             Welcome, <b>{session.user.name}!</b>
           </p>
           <p>Email: {session.user.email}</p>
-          <p>Role: {session.user.role}</p>
           <button
             onClick={() => signOut({ callbackUrl: '/' })}
             className="w-full bg-blue-500 text-white py-2 rounded"
