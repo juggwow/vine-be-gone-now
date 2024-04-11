@@ -3,7 +3,7 @@ import { MongoDBAdapter } from "@auth/mongodb-adapter";
 import NextAuth, { Session, User } from "next-auth";
 import LineProvider from "next-auth/providers/line";
 import type { Adapter, AdapterUser } from "next-auth/adapters";
-import { authOptions } from "./auth-options";
+import { authOptions } from "../../../../auth-options";
 
 const handler = NextAuth(authOptions);
 
