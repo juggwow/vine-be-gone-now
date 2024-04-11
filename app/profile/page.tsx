@@ -1,23 +1,23 @@
-'use client'
+"use client";
 
-import { useSession, signOut } from 'next-auth/react'
-import { useRouter } from 'next/navigation'
-import { useEffect } from 'react'
+import { useSession, signOut } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 export default function Profile() {
-  const { data: session, status } = useSession()
+  const { data: session, status } = useSession();
 
-  const router = useRouter()
+  const router = useRouter();
 
   useEffect(() => {
-    if (status === 'unauthenticated') {
-      router.push('/')
+    if (status === "unauthenticated") {
+      router.push("/");
     }
-  }, [status, router])
+  }, [status, router]);
 
   // When after loading success and have session, show profile
   return (
-    status === 'authenticated' &&
+    status === "authenticated" &&
     session.user && (
       <div className="flex h-screen items-center justify-center">
         <div className="bg-white p-6 rounded-md shadow-md">
@@ -26,7 +26,7 @@ export default function Profile() {
           </p>
           <p>Email: {session.user.email}</p>
           <button
-            onClick={() => signOut({ callbackUrl: '/' })}
+            onClick={() => signOut({ callbackUrl: "/" })}
             className="w-full bg-blue-500 text-white py-2 rounded"
           >
             Logout
@@ -34,5 +34,5 @@ export default function Profile() {
         </div>
       </div>
     )
-  )
+  );
 }
