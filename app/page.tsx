@@ -6,8 +6,5 @@ import { authOptions } from "@/auth-options";
 import VineBeGoneNow from "./vine";
 
 export default async function SignIn() {
-
-  return (
-    <VineBeGoneNow/>
-  );
+  return <VineBeGoneNow />;
 }
