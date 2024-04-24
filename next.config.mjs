@@ -1,7 +1,4 @@
 /** @type {import('next').NextConfig} */
-const nextConfig = {
-  reactStrictMode: false,
-  runtime: 'experimental-edge'
-};
+const nextConfig = {};
 
 export default nextConfig;
