@@ -179,7 +179,7 @@ export default function VineBeGoneNow() {
     setLocation();
   }, []);
   return (
-    <>
+    <div>
       <div className="flex flex-col justify-center items-center mt-3">
         {!url && (
           <Webcam
@@ -269,6 +269,6 @@ export default function VineBeGoneNow() {
           <WebAssetOffIcon />
         </button>
       </div>
-    </>
+    </div>
   );
 }
