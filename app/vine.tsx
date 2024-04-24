@@ -1,17 +1,6 @@
 "use client";
 
 import {
-  Box,
-  Button,
-  Card,
-  CardContent,
-  Grid,
-  TextField,
-  CardActions,
-} from "@mui/material";
-import { url } from "inspector";
-import { Head } from "next/document";
-import {
   useState,
   useEffect,
   useMemo,
@@ -20,10 +9,8 @@ import {
   ChangeEvent,
 } from "react";
 import AddAPhotoIcon from "@mui/icons-material/AddAPhoto";
-import DeleteIcon from "@mui/icons-material/Delete";
 import ElectricBoltIcon from "@mui/icons-material/ElectricBolt";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
-import LocationOffIcon from "@mui/icons-material/LocationOff";
 import CancelIcon from "@mui/icons-material/Cancel";
 import SendIcon from "@mui/icons-material/Send";
 import uploadPhoto from "@/lib/upload-photo";
@@ -31,7 +18,7 @@ import { Karnfaifa } from "@/type/vine-be-gone-now";
 import { RequestData, Geolocation } from "@/type/vine-be-gone-now";
 import Webcam from "react-webcam";
 import WebAssetOffIcon from "@mui/icons-material/WebAssetOff";
-// import liff from "@line/liff";
+import liff from "@line/liff";
 
 const videoConstraints = {
   width: 640,
@@ -70,7 +57,6 @@ export default function VineBeGoneNow() {
 
   useEffect(() => {
     const initialLiff = async () => {
-      const liff = (await import("@line/liff")).default
       try {
         await liff.init({ liffId: process.env.NEXT_PUBLIC_LIFF_ID as string });
       } catch (error) {
@@ -85,16 +71,16 @@ export default function VineBeGoneNow() {
     initialLiff();
   }, []);
 
-  const liff = useMemo(async()=>{
-    const liff = (await import("@line/liff")).default
-    try {
-      await liff.init({ liffId: process.env.NEXT_PUBLIC_LIFF_ID as string });
-      return liff
-    } catch (error) {
-      console.error("liff init error");
-      return null
-    }
-  },[])
+  // const liff = useMemo(async()=>{
+  //   const liff = (await import("@line/liff")).default
+  //   try {
+  //     await liff.init({ liffId: process.env.NEXT_PUBLIC_LIFF_ID as string });
+  //     return liff
+  //   } catch (error) {
+  //     console.error("liff init error");
+  //     return null
+  //   }
+  // },[])
 
   const handleGeolocationError = (error: GeolocationPositionError) => {
     switch (error.code) {
