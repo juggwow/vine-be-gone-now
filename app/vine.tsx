@@ -19,6 +19,8 @@ import { RequestData, Geolocation } from "@/type/vine-be-gone-now";
 import Webcam from "react-webcam";
 import WebAssetOffIcon from "@mui/icons-material/WebAssetOff";
 import liff from "@line/liff";
+import { findUser } from "./action";
+import { useRouter } from "next/navigation";
 
 const videoConstraints = {
   width: 640,
@@ -47,13 +49,15 @@ export default function VineBeGoneNow() {
   const webcamRef = useRef<Webcam>(null);
   const formRef = useRef<HTMLFormElement | null>(null);
   const [url, setUrl] = useState<string | null>(null);
-  const [displayName, setDisplayname] = useState("");
+  const [userId, setuserId] = useState("");
   const [positionError, setPositionError] = useState<string>("");
   const [geolocation, setGeolocation] = useState<Geolocation>({
     lat: "0.0000",
     lon: "0.0000",
     karnfaifa: null,
   });
+
+  const router = useRouter()
 
   useEffect(() => {
     const initialLiff = async () => {
@@ -64,23 +68,21 @@ export default function VineBeGoneNow() {
       }
       if (!liff.isLoggedIn()) {
         liff.login();
-      } else {
-        setDisplayname((await liff.getProfile()).displayName);
+      } 
+
+      if(!(await liff.getFriendship()).friendFlag){
+        window.open("https://line.me/ti/p/@409wseyb")
       }
+
+      const res = await findUser((await liff.getProfile()).userId)
+      if(res.status == "fail"){
+        liff.closeWindow()
+      }
+      if(!res.hasUserProfile)
+      router.push("/profile")
     };
     initialLiff();
   }, []);
-
-  // const liff = useMemo(async()=>{
-  //   const liff = (await import("@line/liff")).default
-  //   try {
-  //     await liff.init({ liffId: process.env.NEXT_PUBLIC_LIFF_ID as string });
-  //     return liff
-  //   } catch (error) {
-  //     console.error("liff init error");
-  //     return null
-  //   }
-  // },[])
 
   const handleGeolocationError = (error: GeolocationPositionError) => {
     switch (error.code) {
