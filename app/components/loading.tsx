@@ -1,4 +1,4 @@
-'use client'
+"use client";
 
 import { Snackbar, Alert } from "@mui/material";
 import { Backdrop, CircularProgress } from "@mui/material";
@@ -11,7 +11,7 @@ import {
   useContext,
   useState,
   useCallback,
-  Suspense
+  Suspense,
 } from "react";
 
 type AlertSnackBarType = {

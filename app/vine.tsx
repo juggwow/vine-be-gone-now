@@ -50,7 +50,7 @@ const findBusinessArea = async (
 };
 
 export default function VineBeGoneNow() {
-  const {loading,alert} = useAlertLoading()
+  const { loading, alert } = useAlertLoading();
   const webcamRef = useRef<Webcam>(null);
   const formRef = useRef<HTMLFormElement | null>(null);
   const [url, setUrl] = useState<string | null>(null);
@@ -65,7 +65,7 @@ export default function VineBeGoneNow() {
 
   useEffect(() => {
     const initialLiff = async () => {
-      loading(true)
+      loading(true);
       try {
         await liff.init({ liffId: process.env.NEXT_PUBLIC_LIFF_ID as string });
       } catch (error) {
@@ -84,7 +84,7 @@ export default function VineBeGoneNow() {
         liff.closeWindow();
       }
       if (!res.hasUserProfile) router.push("/profile");
-      loading(false)
+      loading(false);
     };
     initialLiff();
   }, []);
@@ -126,20 +126,26 @@ export default function VineBeGoneNow() {
     e.preventDefault();
 
     if (!url || !geolocation.karnfaifa) {
-      alert("ไม่มีรูปภาพ หรือไม่มีพิกัดของรูปภาพ กรุณาลองใหม่อีกครั้ง","error")
+      alert(
+        "ไม่มีรูปภาพ หรือไม่มีพิกัดของรูปภาพ กรุณาลองใหม่อีกครั้ง",
+        "error",
+      );
       return;
     }
 
     const form = formRef.current;
     if (!form) {
-      alert("ข้อมูลไม่ถูกต้องหรือคุณไม่ได้กรอกข้อมูลบางส่วน โปรดตรวจสอบอีกครั้ง และลองใหม่","error")
+      alert(
+        "ข้อมูลไม่ถูกต้องหรือคุณไม่ได้กรอกข้อมูลบางส่วน โปรดตรวจสอบอีกครั้ง และลองใหม่",
+        "error",
+      );
       return;
     }
 
-    loading(true)
+    loading(true);
     const uploadedImage = await uploadPhoto(url);
     if (!uploadedImage) {
-      alert("ไม่สามารถอัปโหลดรูปภาพได้ กรุณาลองใหม่อีกครั้ง","error")
+      alert("ไม่สามารถอัปโหลดรูปภาพได้ กรุณาลองใหม่อีกครั้ง", "error");
       return;
     }
 
@@ -149,17 +155,17 @@ export default function VineBeGoneNow() {
       place: form["place"].value,
       uploadedImage,
     };
-    const res = await saveRiskPoint(body,((await liff.getProfile()).userId))
-    loading(false)
-    if(res.status == "no user"){
-      router.push("/profile")
-      return
-    }
-    if(res.status == "cannot insert the riskpoint"){
-      alert("เกิดข้อผิดพลาดในการจัดเก็บข้อมูล กรุณาลองใหม่อีกครั้ง","error")
+    const res = await saveRiskPoint(body, (await liff.getProfile()).userId);
+    loading(false);
+    if (res.status == "no user") {
+      router.push("/profile");
       return;
     }
-    liff.closeWindow()
+    if (res.status == "cannot insert the riskpoint") {
+      alert("เกิดข้อผิดพลาดในการจัดเก็บข้อมูล กรุณาลองใหม่อีกครั้ง", "error");
+      return;
+    }
+    liff.closeWindow();
   };
 
   const setLocation = useCallback(async () => {

@@ -11,11 +11,11 @@ export async function addProfile(prevState: any, formData: FormData) {
         message: "error",
       };
     }
-    const mobileno = (formData.get("mobileno") as string).replace(/-/g,'')
-    if(!/^0[6-9]\d{8}$/.test(mobileno as string)){
-      return{
-        message: "invalid, *กรุณากรอกหมายเลขโทรศัพท์มือถือ 10 หลักให้ถูกต้อง"
-      }
+    const mobileno = (formData.get("mobileno") as string).replace(/-/g, "");
+    if (!/^0[6-9]\d{8}$/.test(mobileno as string)) {
+      return {
+        message: "invalid, *กรุณากรอกหมายเลขโทรศัพท์มือถือ 10 หลักให้ถูกต้อง",
+      };
     }
     const findProfile = await getProfile(sub as string);
     if (findProfile["name"] == "" && findProfile["mobileno"] == "") {
@@ -35,7 +35,7 @@ export async function addProfile(prevState: any, formData: FormData) {
         };
       }
     } else {
-      console.log('update')
+      console.log("update");
       await mongoClient.connect();
       const resultInsert = await mongoClient
         .db("vine-be-gone")
@@ -62,7 +62,7 @@ export async function addProfile(prevState: any, formData: FormData) {
       message: "/",
     };
   } catch (e) {
-    console.log(e)
+    console.log(e);
     return {
       message: "error",
     };

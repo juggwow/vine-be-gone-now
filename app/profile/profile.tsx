@@ -11,7 +11,7 @@ import {
 import { useFormState } from "react-dom";
 import { addProfile, getProfile } from "./action";
 import SendIcon from "@mui/icons-material/Send";
-import { useRouter,useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import WebAssetOffIcon from "@mui/icons-material/WebAssetOff";
 import { useAlertLoading } from "../components/loading";
 
@@ -20,24 +20,24 @@ const initialState = {
 };
 
 export default function ProfileForm() {
-  const searchParams = useSearchParams()
-  const {loading} = useAlertLoading()
+  const searchParams = useSearchParams();
+  const { loading } = useAlertLoading();
   const [state, formAction] = useFormState(addProfile, initialState);
   const router = useRouter();
-  const [invalidMsg,setInvalidMsg] = useState("")
+  const [invalidMsg, setInvalidMsg] = useState("");
   const [userID, setUserID] = useState<string>("");
   const [profile, setProfile] = useState({
     mobileno: "",
     name: "",
   });
 
-  const closeOnSuccessForm = useMemo(()=>{
-    return searchParams.get('closewindow')
-  },[searchParams])
+  const closeOnSuccessForm = useMemo(() => {
+    return searchParams.get("closewindow");
+  }, [searchParams]);
 
   useEffect(() => {
     const initialLiff = async () => {
-      loading(true)
+      loading(true);
       try {
         await liff.init({ liffId: process.env.NEXT_PUBLIC_LIFF_ID as string });
       } catch (error) {
@@ -54,24 +54,24 @@ export default function ProfileForm() {
       }
 
       setProfile(await getProfile(sub));
-      loading(false)
+      loading(false);
     };
     initialLiff();
   }, []);
-  
+
   useEffect(() => {
     if (state.message == "") return;
     if (state.message.includes("error")) {
       liff.closeWindow();
-      return
+      return;
     }
-    if (state.message.includes("invalid")){
-      setInvalidMsg(state.message.split(", ")[1])
-      return
+    if (state.message.includes("invalid")) {
+      setInvalidMsg(state.message.split(", ")[1]);
+      return;
     }
-    if(closeOnSuccessForm && closeOnSuccessForm == 'ok'){
+    if (closeOnSuccessForm && closeOnSuccessForm == "ok") {
       liff.closeWindow();
-      return
+      return;
     }
     router.push(state.message);
   }, [state]);
@@ -119,7 +119,7 @@ export default function ProfileForm() {
           name="mobileno"
           defaultValue={profile.mobileno}
         />
-        <span className="w-5/6 mb-6 text-xs text-red-700" >{invalidMsg}</span>
+        <span className="w-5/6 mb-6 text-xs text-red-700">{invalidMsg}</span>
 
         <button
           type="submit"

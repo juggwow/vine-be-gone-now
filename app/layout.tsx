@@ -20,9 +20,7 @@ export default async function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <SessionProvider>
-          <AlertAndLoading>
-            {children}
-          </AlertAndLoading>
+          <AlertAndLoading>{children}</AlertAndLoading>
         </SessionProvider>
       </body>
     </html>
