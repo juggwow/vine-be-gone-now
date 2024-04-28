@@ -66,7 +66,7 @@ export async function sendMessageToMaintenance(data: RequestData, id: string,tel
             {
               type: "uri",
               label: "แก้ไข",
-              uri: `${process.env.NEXTAUTH_URL}/maintenance/pm-vine/${id}`,
+              uri: `${process.env.NEXT_PUBLIC_MAINTENACE_URL}/maintenance/pm-vine/${id}`,
             },
           ],
         },
