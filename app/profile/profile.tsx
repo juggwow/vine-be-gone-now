@@ -21,7 +21,7 @@ const initialState = {
 
 export default function ProfileForm() {
   const searchParams = useSearchParams();
-  const { loading } = useAlertLoading();
+  const { loading,alert } = useAlertLoading();
   const [state, formAction] = useFormState(addProfile, initialState);
   const router = useRouter();
   const [invalidMsg, setInvalidMsg] = useState("");
@@ -85,9 +85,8 @@ export default function ProfileForm() {
   }, [state]);
 
   const handleFormAction = (e:FormData)=>{
-    loading(true)
+    alert("กำลังปรับปรุงข้อมูลผู้ใช้","info")
     formAction(e)
-    loading(false)
   }
 
   const handleCloseWindow = () => {
