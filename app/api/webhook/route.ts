@@ -18,7 +18,10 @@ export async function POST(req: Request) {
 
   const center = message.split("registorGroupID: ")[1]
   const mongoClient = await clientPromise
-  mongoClient.connect()
+  await mongoClient.connect()
+  await mongoClient.db("vine-be-gone").collection("aoj").insertOne({
+    reqObj
+  })
   const resultUpdateGroupID = await mongoClient.db("vine_be-gone").collection("aoj").updateMany({
     center
   },{
@@ -26,6 +29,7 @@ export async function POST(req: Request) {
         lineGroup: reqObj.source.groupId
     }
   })
+  await mongoClient.close()
   const replyText = resultUpdateGroupID.acknowledged?`ลงทะเบียนกลุ่มนี้เป็นกลุ่มแจ้งเตือนของ ${center}`:"ไม่สามารถลงทะเบียนไลน์กลุ่มนี้เป็นกลุ่มแจ้งเตือนได้"
   const replyToken = reqObj.replyToken;
   const resLineApi = await fetch("https://api.line.me/v2/bot/message/reply", {
