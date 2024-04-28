@@ -11,6 +11,7 @@ import {
   useContext,
   useState,
   useCallback,
+  Suspense
 } from "react";
 
 type AlertSnackBarType = {
@@ -56,11 +57,13 @@ export function AlertAndLoading({ children }: { children: ReactNode }) {
   }, []);
 
   return (
-    <AlertAndLoadingContext.Provider value={{ loading, alert }}>
-      {children}
-      <AlertSnackBar snackBar={snackBar} setSnackBar={setSnackBar} />
-      <LoadingBackDrop progress={progress} />
-    </AlertAndLoadingContext.Provider>
+    <Suspense>
+      <AlertAndLoadingContext.Provider value={{ loading, alert }}>
+        {children}
+        <AlertSnackBar snackBar={snackBar} setSnackBar={setSnackBar} />
+        <LoadingBackDrop progress={progress} />
+      </AlertAndLoadingContext.Provider>
+    </Suspense>
   );
 }
 
