@@ -1,6 +1,6 @@
 "use server";
 
-import { sendTextMsgToReporter } from "@/lib/line-api";
+import { sendMessageToMaintenance, sendTextMsgToReporter } from "@/lib/line-api";
 import clientPromise from "@/lib/mongodb";
 import { RequestData } from "@/type/vine-be-gone-now";
 import { redirect } from "next/navigation";
@@ -99,11 +99,13 @@ export async function saveRiskPoint(data: RequestData, sub: string) {
     };
   }
 
+  const sendtToMaintenance = await sendMessageToMaintenance(data,resultInsert.insertedId.toHexString(),userInVine['mobileno'])
+
   const sendLineMsgStatus = await sendTextMsgToReporter(
     sub,
-    `ขอบคุณที่ช่วยรายงานสิ่งผิดปกติให้กับเรา เราจะดำเนินการแจ้ง ${data.karnfaifa?.fullName} ในทันที และหากเราดำเนินการแล้ว จะแจ้งให้ท่านทราบอีกครั้ง`,
+    `ขอบคุณที่ช่วยรายงานสิ่งผิดปกติให้กับเรา ${sendtToMaintenance?`เราได้ดำเนินการแจ้ง ${data.karnfaifa?.fullName} แล้ว`:`เราจะดำเนินการแจ้ง ${data.karnfaifa?.fullName} ในทันที`} และหากเราดำเนินการแก้ไขจะแจ้งให้ท่านทราบอีกครั้ง`,
   );
-  if (sendLineMsgStatus != 200) {
+  if (!sendLineMsgStatus) {
     return {
       status: "cannot send line msg",
     };
