@@ -21,6 +21,7 @@ import WebAssetOffIcon from "@mui/icons-material/WebAssetOff";
 import liff from "@line/liff";
 import { findUser } from "./action";
 import { useRouter } from "next/navigation";
+import { useAlertLoading } from "./components/loading";
 
 const videoConstraints = {
   width: 640,
@@ -34,6 +35,9 @@ const findBusinessArea = async (
 ): Promise<Karnfaifa | null> => {
   const res = await fetch("/api/lat-lon-to-aoj", {
     method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
     body: JSON.stringify({
       lat,
       lon,
@@ -46,6 +50,7 @@ const findBusinessArea = async (
 };
 
 export default function VineBeGoneNow() {
+  const {loading} = useAlertLoading()
   const webcamRef = useRef<Webcam>(null);
   const formRef = useRef<HTMLFormElement | null>(null);
   const [url, setUrl] = useState<string | null>(null);
@@ -57,10 +62,11 @@ export default function VineBeGoneNow() {
     karnfaifa: null,
   });
 
-  const router = useRouter()
+  const router = useRouter();
 
   useEffect(() => {
     const initialLiff = async () => {
+      loading(true)
       try {
         await liff.init({ liffId: process.env.NEXT_PUBLIC_LIFF_ID as string });
       } catch (error) {
@@ -68,18 +74,18 @@ export default function VineBeGoneNow() {
       }
       if (!liff.isLoggedIn()) {
         liff.login();
-      } 
-
-      if(!(await liff.getFriendship()).friendFlag){
-        window.open("https://line.me/ti/p/@409wseyb")
       }
 
-      const res = await findUser((await liff.getProfile()).userId)
-      if(res.status == "fail"){
-        liff.closeWindow()
+      if (!(await liff.getFriendship()).friendFlag) {
+        window.open("https://line.me/ti/p/@409wseyb");
       }
-      if(!res.hasUserProfile)
-      router.push("/profile")
+
+      const res = await findUser((await liff.getProfile()).userId);
+      if (res.status == "fail") {
+        liff.closeWindow();
+      }
+      if (!res.hasUserProfile) router.push("/profile");
+      loading(false)
     };
     initialLiff();
   }, []);
@@ -148,13 +154,13 @@ export default function VineBeGoneNow() {
     handleCancel();
   };
 
-  const handleCloseWindow =async () => {
-    const l = await liff
-    if(!l){
-      return
+  const handleCloseWindow = async () => {
+    const l = await liff;
+    if (!l) {
+      return;
     }
-    l.closeWindow()
-  }
+    l.closeWindow();
+  };
 
   const setLocation = useCallback(async () => {
     navigator.geolocation.getCurrentPosition(
@@ -269,7 +275,10 @@ export default function VineBeGoneNow() {
             <AddAPhotoIcon fontSize="medium" />
           </button>
         )}
-        <button onClick={()=>handleCloseWindow()} className="fixed right-3 bottom-[152px] ring-2 hover:ring-offset-2 rounded-full ring-slate-400 text-slate-400 p-3">
+        <button
+          onClick={() => handleCloseWindow()}
+          className="fixed right-3 bottom-[152px] ring-2 hover:ring-offset-2 rounded-full ring-slate-400 text-slate-400 p-3"
+        >
           <WebAssetOffIcon />
         </button>
       </div>
