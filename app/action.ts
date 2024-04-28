@@ -1,6 +1,8 @@
 "use server";
 
+import { sendTextMsgToReporter } from "@/lib/line-api";
 import clientPromise from "@/lib/mongodb";
+import { RequestData } from "@/type/vine-be-gone-now";
 import { redirect } from "next/navigation";
 
 export async function findUser(sub: string) {
@@ -66,3 +68,41 @@ export async function findUser(sub: string) {
     };
   }
 }
+
+export async function saveRiskPoint(data:RequestData,sub: string){
+  const mongoClient = await clientPromise;
+    await mongoClient.connect();
+    const userInVine = await mongoClient
+      .db("vine-be-gone")
+      .collection("user")
+      .findOne({ sub });
+    if(!userInVine) {
+      return {
+        status: "no user"
+      }
+    }
+    const resultInsert = await mongoClient.db("vine-be-gone").collection("risk").insertOne({
+      sub,
+      riskPoint: data.riskPoint,
+      place: data.place,
+      lat: data.lat,
+      lon: data.lon,
+      karnfaifa: data.karnfaifa,
+      uploadedImage: data.uploadedImage
+    })
+    if(!resultInsert.acknowledged){
+      return {
+        status: "cannot insert the riskpoint"
+      }
+    }
+
+    const sendLineMsgStatus = await sendTextMsgToReporter(sub,`ขอบคุณที่ช่วยรายงานสิ่งผิดปกติให้กับเรา เราจะดำเนินการแจ้ง ${data.karnfaifa?.fullName} ในทันที และหากเราดำเนินการแล้ว จะแจ้งให้ท่านทราบอีกครั้ง`)
+    if(sendLineMsgStatus != 200){
+      return{
+        status: "cannot send line msg"
+      }
+    }
+    return{
+      status:"success"
+    }
+} 

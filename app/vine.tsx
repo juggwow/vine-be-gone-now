@@ -19,7 +19,7 @@ import { RequestData, Geolocation } from "@/type/vine-be-gone-now";
 import Webcam from "react-webcam";
 import WebAssetOffIcon from "@mui/icons-material/WebAssetOff";
 import liff from "@line/liff";
-import { findUser } from "./action";
+import { findUser, saveRiskPoint } from "./action";
 import { useRouter } from "next/navigation";
 import { useAlertLoading } from "./components/loading";
 
@@ -50,11 +50,10 @@ const findBusinessArea = async (
 };
 
 export default function VineBeGoneNow() {
-  const {loading} = useAlertLoading()
+  const {loading,alert} = useAlertLoading()
   const webcamRef = useRef<Webcam>(null);
   const formRef = useRef<HTMLFormElement | null>(null);
   const [url, setUrl] = useState<string | null>(null);
-  const [userId, setuserId] = useState("");
   const [positionError, setPositionError] = useState<string>("");
   const [geolocation, setGeolocation] = useState<Geolocation>({
     lat: "0.0000",
@@ -127,16 +126,20 @@ export default function VineBeGoneNow() {
     e.preventDefault();
 
     if (!url || !geolocation.karnfaifa) {
-      return;
-    }
-
-    const uploadedImage = await uploadPhoto(url);
-    if (!uploadedImage) {
+      alert("ไม่มีรูปภาพ หรือไม่มีพิกัดของรูปภาพ กรุณาลองใหม่อีกครั้ง","error")
       return;
     }
 
     const form = formRef.current;
     if (!form) {
+      alert("ข้อมูลไม่ถูกต้องหรือคุณไม่ได้กรอกข้อมูลบางส่วน โปรดตรวจสอบอีกครั้ง และลองใหม่","error")
+      return;
+    }
+
+    loading(true)
+    const uploadedImage = await uploadPhoto(url);
+    if (!uploadedImage) {
+      alert("ไม่สามารถอัปโหลดรูปภาพได้ กรุณาลองใหม่อีกครั้ง","error")
       return;
     }
 
@@ -146,20 +149,17 @@ export default function VineBeGoneNow() {
       place: form["place"].value,
       uploadedImage,
     };
-    const res = await fetch("/api/vine-be-gone-now/report-risk", {
-      method: "POST",
-      body: JSON.stringify(body),
-    });
-
-    handleCancel();
-  };
-
-  const handleCloseWindow = async () => {
-    const l = await liff;
-    if (!l) {
+    const res = await saveRiskPoint(body,((await liff.getProfile()).userId))
+    loading(false)
+    if(res.status == "no user"){
+      router.push("/profile")
+      return
+    }
+    if(res.status == "cannot insert the riskpoint"){
+      alert("เกิดข้อผิดพลาดในการจัดเก็บข้อมูล กรุณาลองใหม่อีกครั้ง","error")
       return;
     }
-    l.closeWindow();
+    liff.closeWindow()
   };
 
   const setLocation = useCallback(async () => {
@@ -226,6 +226,7 @@ export default function VineBeGoneNow() {
         )}
         {positionError == "" && geolocation.karnfaifa && (
           <form
+            onSubmit={handleSubmit}
             ref={formRef}
             className="w-full flex flex-col max-w-[400px] justify-center"
           >
@@ -276,7 +277,7 @@ export default function VineBeGoneNow() {
           </button>
         )}
         <button
-          onClick={() => handleCloseWindow()}
+          onClick={() => liff.closeWindow()}
           className="fixed right-3 bottom-[152px] ring-2 hover:ring-offset-2 rounded-full ring-slate-400 text-slate-400 p-3"
         >
           <WebAssetOffIcon />
