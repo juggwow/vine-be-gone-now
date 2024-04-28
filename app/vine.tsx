@@ -67,7 +67,7 @@ export default function VineBeGoneNow() {
     const initialLiff = async () => {
       loading(true);
       try {
-        await liff.init({ liffId: process.env.NEXT_PUBLIC_LIFF_ID as string });
+        await liff.init({ liffId: process.env.NEXT_PUBLIC_LIFF_VINE_ID as string });
       } catch (error) {
         console.error("liff init error");
       }
