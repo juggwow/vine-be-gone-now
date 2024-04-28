@@ -19,16 +19,18 @@ export async function POST(req: Request) {
   const center = message.split("registorGroupID: ")[1]
   const mongoClient = await clientPromise
   await mongoClient.connect()
-  await mongoClient.db("vine-be-gone").collection("webhook").insertOne({
-    reqObj,
-    groupId: reqObj.source.groupId
-  })
   const resultUpdateGroupID = await mongoClient.db("vine_be-gone").collection("aoj").updateMany({
     center
   },{
     $set: {
         lineGroup: reqObj.source.groupId
     }
+  })
+  await mongoClient.db("vine-be-gone").collection("webhook").insertOne({
+    reqObj,
+    groupId: reqObj.source.groupId,
+    center,
+    resultUpdateGroupID
   })
   await mongoClient.close()
   const replyText = resultUpdateGroupID.acknowledged?`ลงทะเบียนกลุ่มนี้เป็นกลุ่มแจ้งเตือนของ ${center}`:"ไม่สามารถลงทะเบียนไลน์กลุ่มนี้เป็นกลุ่มแจ้งเตือนได้"
