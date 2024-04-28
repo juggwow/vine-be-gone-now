@@ -19,7 +19,7 @@ export async function POST(req: Request) {
   const center = message.split("registorGroupID: ")[1]
   const mongoClient = await clientPromise
   await mongoClient.connect()
-  const resultUpdateGroupID = await mongoClient.db("vine_be-gone").collection("aoj").updateMany({
+  const resultUpdateGroupID = await mongoClient.db("vine-be-gone").collection("aoj").updateMany({
     center
   },{
     $set: {
