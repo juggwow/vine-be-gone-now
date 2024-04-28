@@ -43,7 +43,7 @@ export default function ProfileForm() {
       } catch (error) {
         console.error("liff init error");
       }
-      
+
       const os = liff.getOS()
       if(os == "web" && process.env.NEXT_PUBLIC_VERSION as string == "production"){
         router.push("/error")
@@ -84,15 +84,22 @@ export default function ProfileForm() {
     router.push(state.message);
   }, [state]);
 
+  const handleFormAction = (e:FormData)=>{
+    loading(true)
+    formAction(e)
+    loading(false)
+  }
+
   const handleCloseWindow = () => {
     liff.closeWindow();
   };
   return (
     <div className="flex flex-col align-middle items-center">
       <form
-        action={formAction}
+        action={(e)=>{handleFormAction(e)}}
         className="w-full flex flex-col p-1 max-w-[400px] justify-center"
       >
+        <p className="w-full text-lg mb-6">แก้ไข/เพิ่มข้อมูลผู้ใช้งาน</p>
         <label className="w-full hidden" htmlFor="id">
           id
         </label>
