@@ -19,8 +19,9 @@ export async function POST(req: Request) {
   const center = message.split("registorGroupID: ")[1]
   const mongoClient = await clientPromise
   await mongoClient.connect()
-  await mongoClient.db("vine-be-gone").collection("aoj").insertOne({
-    reqObj
+  await mongoClient.db("vine-be-gone").collection("webhook").insertOne({
+    reqObj,
+    groupId: reqObj.source.groupId
   })
   const resultUpdateGroupID = await mongoClient.db("vine_be-gone").collection("aoj").updateMany({
     center
