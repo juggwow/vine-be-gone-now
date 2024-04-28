@@ -71,6 +71,12 @@ export default function VineBeGoneNow() {
       } catch (error) {
         console.error("liff init error");
       }
+      
+      const os = liff.getOS()
+      if(os == "web" && process.env.NEXT_PUBLIC_VERSION as string == "production"){
+        router.push("/error")
+      }
+
       if (!liff.isLoggedIn()) {
         liff.login();
       }

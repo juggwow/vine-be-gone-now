@@ -1,5 +1,6 @@
 "use server";
 
+import { sendTextMsgToReporter } from "@/lib/line-api";
 import clientPromise from "@/lib/mongodb";
 
 export async function addProfile(prevState: any, formData: FormData) {
@@ -35,7 +36,6 @@ export async function addProfile(prevState: any, formData: FormData) {
         };
       }
     } else {
-      console.log("update");
       await mongoClient.connect();
       const resultInsert = await mongoClient
         .db("vine-be-gone")
@@ -57,6 +57,7 @@ export async function addProfile(prevState: any, formData: FormData) {
         };
       }
     }
+    await sendTextMsgToReporter(sub as string,"เราได้ทำการ แก้ไข/เพิ่มข้อมูล ผู้ใช้งานแล้ว คุณสามารถแจ้งสิ่งผิดปกติได้เลยจากเมนูด้านล่าง")
 
     return {
       message: "/",

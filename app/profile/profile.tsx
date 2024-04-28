@@ -43,6 +43,12 @@ export default function ProfileForm() {
       } catch (error) {
         console.error("liff init error");
       }
+      
+      const os = liff.getOS()
+      if(os == "web" && process.env.NEXT_PUBLIC_VERSION as string == "production"){
+        router.push("/error")
+      }
+
       if (!liff.isLoggedIn()) {
         liff.login({ redirectUri: "/profile" });
       }
@@ -52,6 +58,8 @@ export default function ProfileForm() {
       if (!(await liff.getFriendship()).friendFlag) {
         window.open("https://line.me/ti/p/@409wseyb");
       }
+
+      
 
       setProfile(await getProfile(sub));
       loading(false);

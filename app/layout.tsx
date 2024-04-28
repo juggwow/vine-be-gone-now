@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import SessionProvider from "./components/SessionProvider";
 import { AlertAndLoading } from "./components/loading";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -37,9 +36,7 @@ export default async function RootLayout({
         />
         <link rel="manifest" href="/site.webmanifest" />
       <body className={inter.className}>
-        <SessionProvider>
           <AlertAndLoading>{children}</AlertAndLoading>
-        </SessionProvider>
       </body>
     </html>
   );
