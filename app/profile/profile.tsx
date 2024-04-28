@@ -138,14 +138,14 @@ export default function ProfileForm() {
 
         <button
           type="submit"
-          className=" fixed right-3 bottom-5 ring-2 hover:ring-offset-2 rounded-full ring-slate-400 text-slate-400 p-3"
+          className=" fixed right-3 bottom-5 ring-2 hover:ring-offset-2  hover:ring-red-400 rounded-full ring-slate-400 text-slate-400 p-3"
         >
           <SendIcon />
         </button>
       </form>
       <button
         onClick={() => handleCloseWindow()}
-        className="fixed right-3 bottom-[152px] ring-2 hover:ring-offset-2 rounded-full ring-slate-400 text-slate-400 p-3"
+        className="fixed right-3 bottom-[152px] ring-2 hover:ring-offset-2  hover:ring-red-400 rounded-full ring-slate-400 text-slate-400 p-3"
       >
         <WebAssetOffIcon />
       </button>

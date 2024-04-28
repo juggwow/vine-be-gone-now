@@ -264,7 +264,7 @@ export default function VineBeGoneNow() {
             {url && (
               <button
                 type="submit"
-                className="fixed right-3 bottom-10 ring-2 hover:ring-offset-2 rounded-full ring-slate-400 text-slate-400 p-3"
+                className="fixed right-3 bottom-10 ring-2 hover:ring-offset-2 hover:ring-red-400 rounded-full ring-slate-400 text-slate-400 p-3"
               >
                 <SendIcon />
               </button>
@@ -275,7 +275,7 @@ export default function VineBeGoneNow() {
         {positionError == "" && url && geolocation && (
           <button
             onClick={() => handleCancel()}
-            className="fixed right-3 bottom-24 ring-2 hover:ring-offset-2 rounded-full ring-slate-400 text-slate-400 p-3"
+            className="fixed right-3 bottom-24 ring-2 hover:ring-offset-2  hover:ring-red-400 rounded-full ring-slate-400 text-slate-400 p-3"
           >
             <CancelIcon />
           </button>
@@ -283,14 +283,14 @@ export default function VineBeGoneNow() {
         {positionError == "" && !url && geolocation && (
           <button
             onClick={() => handleCapture()}
-            className="fixed right-3 bottom-10 ring-2 hover:ring-offset-2 rounded-full ring-slate-400 text-slate-400 p-3"
+            className="fixed right-3 bottom-10 ring-2 hover:ring-offset-2  hover:ring-red-400 rounded-full ring-slate-400 text-slate-400 p-3"
           >
             <AddAPhotoIcon fontSize="medium" />
           </button>
         )}
         <button
           onClick={() => liff.closeWindow()}
-          className="fixed right-3 bottom-[152px] ring-2 hover:ring-offset-2 rounded-full ring-slate-400 text-slate-400 p-3"
+          className="fixed right-3 bottom-[152px] ring-2 hover:ring-offset-2  hover:ring-red-400 rounded-full ring-slate-400 text-slate-400 p-3"
         >
           <WebAssetOffIcon />
         </button>
