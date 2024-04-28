@@ -3,14 +3,30 @@
 import clientPromise from "@/lib/mongodb";
 
 export async function POST(req: Request) {
-    // const mongoClient = await clientPromise
-    // mongoClient.connect()
-    // mongoClient.db("vine-be-gone").collection("webhook").insertOne({
-    //     req: await req.json()
-    // })
   const reqObj = (await req.json()).events[0];
-  console.log(reqObj)
+  if(reqObj.type != "message"){
+    return new Response("",{
+        status: 200
+    })
+  }
   const message = reqObj.message.text as string;
+  if(!message.startsWith("registorGroupID: ")){
+    return new Response("",{
+        status: 200
+    })
+  }
+
+  const center = message.split("registorGroupID: ")[1]
+  const mongoClient = await clientPromise
+  mongoClient.connect()
+  const resultUpdateGroupID = await mongoClient.db("vine_be-gone").collection("aoj").updateMany({
+    center
+  },{
+    $set: {
+        lineGroup: reqObj.source.groupId
+    }
+  })
+  const replyText = resultUpdateGroupID.acknowledged?`ลงทะเบียนกลุ่มนี้เป็นกลุ่มแจ้งเตือนของ ${center}`:"ไม่สามารถลงทะเบียนไลน์กลุ่มนี้เป็นกลุ่มแจ้งเตือนได้"
   const replyToken = reqObj.replyToken;
   const resLineApi = await fetch("https://api.line.me/v2/bot/message/reply", {
     method: "POST",
@@ -23,7 +39,7 @@ export async function POST(req: Request) {
       messages: [
         {
           type: "text",
-          text: `ตอบกลับ ${message}`,
+          text: replyText,
         },
       ],
     }),
