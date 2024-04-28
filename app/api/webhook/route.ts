@@ -1,7 +1,8 @@
 // pages/api/findAOJ.ts
 
 export async function POST(req: Request) {
-  const reqObj = await req.json();
+  const reqObj = (await req.json())[0];
+  console.log(reqObj)
   const message = reqObj.message.text as string;
   const replyToken = reqObj.replyToken;
   const resLineApi = await fetch("https://api.line.me/v2/bot/message/reply", {
